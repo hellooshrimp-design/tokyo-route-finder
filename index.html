@@ -4,6 +4,18 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>도쿄 지하철 노선 가이드</title>
+<meta name="description" content="도쿄 여행 중 우에노, 신주쿠, 시부야 등 도쿄메트로·토에이 지하철 역간 환승 정보를 바로 검색하세요. 출발역과 도착역만 입력하면 직통 노선과 환승 경로를 알려드립니다.">
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="도쿄 지하철 노선 가이드">
+<meta property="og:description" content="출발역과 도착역만 입력하면 도쿄 지하철 환승 경로를 바로 알려드립니다.">
+<meta property="og:image" content="https://hellooshrimp-design.github.io/tokyo-route-finder/og-image.png">
+<meta property="og:url" content="https://hellooshrimp-design.github.io/tokyo-route-finder/">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="도쿄 지하철 노선 가이드">
+<meta name="twitter:description" content="출발역과 도착역만 입력하면 도쿄 지하철 환승 경로를 바로 알려드립니다.">
+<meta name="twitter:image" content="https://hellooshrimp-design.github.io/tokyo-route-finder/og-image.png">
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-WJWJ98BVSE"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
@@ -72,6 +84,37 @@
     height: auto;
     border-radius: 12px;
     border: 3px solid #1a8f4c;
+  }
+
+  .seo-text {
+    font-size: 11px;
+    color: #3f8a63;
+    text-align: center;
+    margin: 8px 4px 0;
+    line-height: 1.5;
+  }
+
+  .share-btn {
+    width: 100%;
+    background: #eafbf1;
+    color: #123d2a;
+    border: 2px solid #7fd9a8;
+    border-radius: 14px;
+    padding: 10px;
+    font-size: 13px;
+    font-weight: 700;
+    font-family: inherit;
+    cursor: pointer;
+    margin-top: 10px;
+  }
+  .share-btn:active { transform: translateY(1px); }
+
+  .home-tip {
+    font-size: 11px;
+    color: #3f8a63;
+    text-align: center;
+    margin: 10px 0 0;
+    line-height: 1.6;
   }
 
   .panel {
@@ -242,6 +285,7 @@
     <div class="screen">
       <img id="heroImg" src="" alt="신주쿠 거리 레트로 이미지">
     </div>
+    <p class="seo-text">우에노·신주쿠·시부야·이케부쿠로 등 도쿄 주요 역간 지하철 환승 정보를 바로 확인하세요.</p>
   </div>
 
   <div class="panel">
@@ -264,6 +308,8 @@
 
     <button class="search-btn" id="searchBtn" type="button">경로찾기</button>
     <p class="scope-note">※ 본 서비스는 도쿄메트로·토에이 지하철(도쿄 서브웨이 티켓 대상 노선) 기준으로 제작되었으며,<br>JR선(야마노테선 등)은 포함되어 있지 않습니다.</p>
+    <button class="share-btn" id="shareBtn" type="button">🔗 여행 동행자에게 공유하기</button>
+    <p class="home-tip">📱 브라우저 메뉴에서 "홈 화면에 추가"를 해두시면<br>여행 중 앱처럼 바로 열어볼 수 있습니다.</p>
   </div>
 
   <div class="panel result-frame" id="resultFrame">
@@ -336,8 +382,26 @@ const startInput = document.getElementById('startInput');
 const endInput = document.getElementById('endInput');
 const searchBtn = document.getElementById('searchBtn');
 const swapBtn = document.getElementById('swapBtn');
+const shareBtn = document.getElementById('shareBtn');
 const resultFrame = document.getElementById('resultFrame');
 const resultBody = document.getElementById('resultBody');
+
+shareBtn.addEventListener('click', function() {
+  const shareData = {
+    title: '도쿄 지하철 노선 가이드',
+    text: '도쿄 여행 중 지하철 환승 경로를 바로 확인해보세요!',
+    url: window.location.href
+  };
+  if (navigator.share) {
+    navigator.share(shareData).catch(function() {});
+  } else if (navigator.clipboard) {
+    navigator.clipboard.writeText(shareData.url).then(function() {
+      shareBtn.textContent = '✅ 링크가 복사되었습니다';
+      setTimeout(function() { shareBtn.textContent = '🔗 여행 동행자에게 공유하기'; }, 2000);
+    });
+  }
+  if (typeof gtag === 'function') { gtag('event', 'share_click'); }
+});
 
 function badge(line) {
   const color = LINE_COLORS[line] || '#999';
