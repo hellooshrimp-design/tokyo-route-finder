@@ -4,6 +4,13 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>도쿄 지하철 노선 가이드</title>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-WJWJ98BVSE"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-WJWJ98BVSE');
+</script>
 <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css">
 <style>
   * { box-sizing: border-box; }
@@ -384,6 +391,24 @@ function search() {
   const endLines = stationToLines[end];
   const direct = [];
   startLines.forEach(function(l) { if (endLines.has(l)) direct.push(l); });
+
+  if (typeof gtag === 'function') {
+    gtag('event', 'route_search', {
+      start_station: start,
+      end_station: end,
+      route_pair: start + ' → ' + end
+    });
+  }
+
+  const SHEET_LOG_URL = 'https://script.google.com/macros/s/AKfycbw9N4vLM2IOko7EBDYeGqVVadhay-dCmEtTGyuqMUnLncO9hRyafuK2a8RMPcVsf2Zo/exec';
+  try {
+    fetch(SHEET_LOG_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'text/plain' },
+      body: JSON.stringify({ start: start, end: end })
+    });
+  } catch (e) {}
 
   function directCard(line) {
     return '<div class="transfer-card">' + badge(line) + ' ' + start + ' - ' + end + '</div>';
