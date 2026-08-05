@@ -16,6 +16,9 @@
 <meta name="twitter:title" content="도쿄 지하철 노선 가이드">
 <meta name="twitter:description" content="출발역과 도착역만 입력하면 도쿄 지하철 환승 경로를 바로 알려드립니다.">
 <meta name="twitter:image" content="https://hellooshrimp-design.github.io/tokyo-route-finder/og-image.png">
+
+<link rel="icon" type="image/png" href="favicon.png">
+<link rel="apple-touch-icon" href="favicon.png">
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-WJWJ98BVSE"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
@@ -213,7 +216,26 @@
   }
   .swap-btn:active { transform: translateY(1px); }
 
+  .btn-row {
+    display: flex;
+    gap: 8px;
+  }
+  .reset-btn {
+    flex-shrink: 0;
+    background: #eafbf1;
+    color: #3f8a63;
+    border: 2px solid #7fd9a8;
+    border-radius: 14px;
+    padding: 0 16px;
+    font-size: 13px;
+    font-weight: 700;
+    font-family: inherit;
+    cursor: pointer;
+  }
+  .reset-btn:active { transform: translateY(1px); }
+
   .search-btn {
+    flex: 1;
     width: 100%;
     background: #1a8f4c;
     color: #ffffff;
@@ -226,6 +248,52 @@
     cursor: pointer;
   }
   .search-btn:active { transform: translateY(1px); }
+
+  .favorites-frame { display: none; }
+  .favorites-frame.show { display: block; }
+  .fav-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #eafbf1;
+    border: 2px solid #7fd9a8;
+    border-radius: 12px;
+    padding: 9px 12px;
+    margin-bottom: 8px;
+    font-size: 13px;
+    color: #123d2a;
+  }
+  .fav-item .fav-route { flex: 1; cursor: pointer; font-weight: 700; }
+  .fav-remove {
+    flex-shrink: 0;
+    background: none;
+    border: none;
+    color: #3f8a63;
+    font-size: 15px;
+    cursor: pointer;
+    padding: 0 0 0 10px;
+  }
+  .fav-add-btn {
+    width: 100%;
+    background: #ffffff;
+    color: #1a8f4c;
+    border: 2px solid #7fd9a8;
+    border-radius: 12px;
+    padding: 9px;
+    font-size: 12px;
+    font-weight: 700;
+    font-family: inherit;
+    cursor: pointer;
+    margin-top: 10px;
+  }
+  .fav-add-btn:active { transform: translateY(1px); }
+
+  .loading-msg {
+    text-align: center;
+    font-size: 13px;
+    color: #3f8a63;
+    padding: 14px 0;
+  }
 
   .scope-note {
     font-size: 11px;
@@ -334,15 +402,24 @@
       </div>
     </div>
 
-    <button class="search-btn" id="searchBtn" type="button">경로찾기</button>
+    <div class="btn-row">
+      <button class="reset-btn" id="resetBtn" type="button">초기화</button>
+      <button class="search-btn" id="searchBtn" type="button">경로찾기</button>
+    </div>
     <p class="scope-note">※ 본 서비스는 도쿄메트로·토에이 지하철(도쿄 서브웨이 티켓 대상 노선) 기준으로 제작되었으며,<br>JR선(야마노테선 등)은 포함되어 있지 않습니다.</p>
     <button class="share-btn" id="shareBtn" type="button">🔗 여행 동행자에게 공유하기</button>
     <p class="home-tip">📱 브라우저 메뉴에서 "홈 화면에 추가"를 해두시면<br>여행 중 앱처럼 바로 열어볼 수 있습니다.</p>
   </div>
 
+  <div class="panel favorites-frame" id="favoritesFrame">
+    <p class="panel-title">⭐ 즐겨찾는 경로</p>
+    <div id="favoritesBody"></div>
+  </div>
+
   <div class="panel result-frame" id="resultFrame">
     <p class="panel-title">검색 결과</p>
     <div id="resultBody"></div>
+    <button class="fav-add-btn" id="favAddBtn" type="button" style="display:none;">⭐ 이 경로 즐겨찾기에 추가</button>
     <p class="scope-note">※ 환승 정보는 참고용입니다. 출발 전 공식 노선도를 한 번 더 확인해 주세요.</p>
   </div>
 
@@ -379,7 +456,7 @@ const LINES = {
   "난보쿠선": ["메구로","시로카네다이","시로카네타카나와","아자부쥬반","롯폰기이치초메","타메이케산노","나가타초","요츠야","이치가야","이다바시","코라쿠엔","도다이마에","혼코마고메","코마고메","니시가하라","오지","오지카미야","시모","아카바네이와부치"],
   "후쿠토신선": ["와코시","지하철나리마스","지하철아카츠카","헤이와다이","히카와다이","코타케무카이하라","센카와","카나메초","이케부쿠로","히가시이케부쿠로","조시가야","니시와세다","히가시신주쿠","신주쿠삼초메","기타산도","메이지진구마에","시부야"],
   "아사쿠사선": ["니시마고메","마고메","나카노부","토고시","고탄다","타카나와다이","센가쿠지","미타","다이몬","신바시","히가시긴자","다카라초","니혼바시","닌교초","히가시니혼바시","아사쿠사바시","쿠라마에","아사쿠사","혼조아즈마바시","오시아게"],
-  "미타선": ["메구로","시로카네다이","시로카네타카나와","미타","시바코엔","오나리몬","우치사이와이초","히비야","오테마치","진보초","스이도바시","카스가","하쿠산","센고쿠","스가모","니시스가모","신이타바시","이타바시구청앞","이타바시혼초","모토하스누마","시무라산초메","하스네","니시다이","타카시마다이라","신타카시마다이라","니시타카시마다이라"],
+  "미타선": ["메구로","시로카네다이","시로카네타카나와","미타","시바코엔","오나리몬","우치사이와이초","히비야","오테마치","진보초","스이도바시","카스가","하쿠산","센고쿠","스가모","니시스가모","신이타바시","이타바시구청앞","이타바시혼초","모토하스누마","시무라사카우에","시무라산초메","하스네","니시다이","타카시마다이라","신타카시마다이라","니시타카시마다이라"],
   "신주쿠선": ["신주쿠","신주쿠삼초메","아케보노바시","이치가야","쿠단시타","오가와마치","이와모토초","바쿠로요코야마","하마초","모리시타","키쿠카와","스미요시","오지마","히가시오지마","후나보리","이치노에","미즈에","시노자키","모토야와타"],
   "오에도선": ["도청앞","신주쿠니시구치","히가시신주쿠","와카마츠카와다","우시고메야나기초","우시고메카구라자카","이다바시","카스가","우에노오카치마치","신오카치마치","쿠라마에","료고쿠","모리시타","키요스미시라카와","몬젠나카초","츠키시마","카치도키","츠키지시조","시오도메","다이몬","아카바네바시","아자부쥬반","롯폰기","아오야마이치초메","국립경기장","요요기","신주쿠","도청앞","니시신주쿠오초메","나카노사카우에","히가시나카노","나카노에고타","네리마","네리마카스가초","히카리가오카"]
 };
@@ -405,10 +482,89 @@ const endInput = document.getElementById('endInput');
 const startSuggest = document.getElementById('startSuggest');
 const endSuggest = document.getElementById('endSuggest');
 const searchBtn = document.getElementById('searchBtn');
+const resetBtn = document.getElementById('resetBtn');
 const swapBtn = document.getElementById('swapBtn');
 const shareBtn = document.getElementById('shareBtn');
+const favAddBtn = document.getElementById('favAddBtn');
+const favoritesFrame = document.getElementById('favoritesFrame');
+const favoritesBody = document.getElementById('favoritesBody');
 const resultFrame = document.getElementById('resultFrame');
 const resultBody = document.getElementById('resultBody');
+
+const FAV_KEY = 'tokyoSubwayFavorites';
+
+function loadFavorites() {
+  try {
+    return JSON.parse(localStorage.getItem(FAV_KEY) || '[]');
+  } catch (e) {
+    return [];
+  }
+}
+
+function saveFavoritesList(list) {
+  try { localStorage.setItem(FAV_KEY, JSON.stringify(list)); } catch (e) {}
+}
+
+function renderFavorites() {
+  const favs = loadFavorites();
+  if (favs.length === 0) {
+    favoritesFrame.classList.remove('show');
+    return;
+  }
+  favoritesFrame.classList.add('show');
+  favoritesBody.innerHTML = favs.map(function(f, i) {
+    return '<div class="fav-item">' +
+      '<span class="fav-route" data-index="' + i + '">' + f.start + ' → ' + f.end + '</span>' +
+      '<button class="fav-remove" data-index="' + i + '">✕</button>' +
+      '</div>';
+  }).join('');
+}
+
+favoritesBody.addEventListener('click', function(e) {
+  const routeEl = e.target.closest('.fav-route');
+  const removeEl = e.target.closest('.fav-remove');
+  if (routeEl) {
+    const favs = loadFavorites();
+    const item = favs[Number(routeEl.dataset.index)];
+    if (item) {
+      startInput.value = item.start;
+      endInput.value = item.end;
+      search();
+    }
+  } else if (removeEl) {
+    const favs = loadFavorites();
+    favs.splice(Number(removeEl.dataset.index), 1);
+    saveFavoritesList(favs);
+    renderFavorites();
+  }
+});
+
+favAddBtn.addEventListener('click', function() {
+  if (!lastStart || !lastEnd) return;
+  const favs = loadFavorites();
+  const exists = favs.some(function(f) { return f.start === lastStart && f.end === lastEnd; });
+  if (!exists) {
+    favs.unshift({ start: lastStart, end: lastEnd });
+    saveFavoritesList(favs.slice(0, 10));
+    renderFavorites();
+  }
+  favAddBtn.textContent = '✅ 즐겨찾기에 저장됨';
+  setTimeout(function() { favAddBtn.textContent = '⭐ 이 경로 즐겨찾기에 추가'; }, 1500);
+  if (typeof gtag === 'function') { gtag('event', 'favorite_add'); }
+});
+
+resetBtn.addEventListener('click', function() {
+  startInput.value = '';
+  endInput.value = '';
+  resultFrame.classList.remove('show');
+  resultBody.innerHTML = '';
+  favAddBtn.style.display = 'none';
+  startSuggest.classList.remove('show');
+  endSuggest.classList.remove('show');
+  startInput.focus();
+});
+
+renderFavorites();
 
 function setupAutocomplete(input, box) {
   let activeIndex = -1;
@@ -521,6 +677,9 @@ function findTransfers(startLines, endLines) {
   return results;
 }
 
+let lastStart = null;
+let lastEnd = null;
+
 function search() {
   let start = startInput.value.trim();
   let end = endInput.value.trim();
@@ -528,6 +687,9 @@ function search() {
   if (end.length > 1 && end.endsWith('역') && !stationToLines[end]) end = end.slice(0, -1);
 
   resultFrame.classList.add('show');
+  favAddBtn.style.display = 'none';
+  lastStart = null;
+  lastEnd = null;
 
   if (!start || !end) {
     resultBody.innerHTML = '<div class="empty-msg">출발역과 도착역을 모두 입력해주세요.</div>';
@@ -541,6 +703,8 @@ function search() {
     resultBody.innerHTML = '<div class="empty-msg">출발역과 도착역이 같습니다.</div>';
     return;
   }
+
+  resultBody.innerHTML = '<div class="loading-msg">🔎 경로를 찾는 중...</div>';
 
   const startLines = stationToLines[start];
   const endLines = stationToLines[end];
@@ -574,21 +738,26 @@ function search() {
       '</div>';
   }
 
-  let html = '<div class="route-path">' + start + '역 → ' + end + '역</div>';
+  setTimeout(function() {
+    let html = '<div class="route-path">' + start + '역 → ' + end + '역</div>';
 
-  if (direct.length > 0) {
-    direct.forEach(function(l) { html += directCard(l); });
-    html += '<div class="empty-msg">환승 없이 한 번에 이동 가능합니다.</div>';
-  } else {
-    const transfers = findTransfers(startLines, endLines);
-    if (transfers.length === 0) {
-      html += '<div class="empty-msg">1회 환승으로 갈 수 있는 경로를 찾지 못했습니다.<br>2회 이상 환승이 필요할 수 있습니다.</div>';
+    if (direct.length > 0) {
+      direct.forEach(function(l) { html += directCard(l); });
+      html += '<div class="empty-msg">환승 없이 한 번에 이동 가능합니다.</div>';
     } else {
-      transfers.slice(0, 4).forEach(function(t) { html += transferCard(t); });
+      const transfers = findTransfers(startLines, endLines);
+      if (transfers.length === 0) {
+        html += '<div class="empty-msg">1회 환승으로 갈 수 있는 경로를 찾지 못했습니다.<br>2회 이상 환승이 필요할 수 있습니다.</div>';
+      } else {
+        transfers.slice(0, 4).forEach(function(t) { html += transferCard(t); });
+      }
     }
-  }
 
-  resultBody.innerHTML = html;
+    resultBody.innerHTML = html;
+    lastStart = start;
+    lastEnd = end;
+    favAddBtn.style.display = 'block';
+  }, 300);
 }
 
 searchBtn.addEventListener('click', search);
