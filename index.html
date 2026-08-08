@@ -350,6 +350,17 @@
     margin: 0 4px 0 2px;
   }
 
+  .best-tag {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 800;
+    color: #ffffff;
+    background: #1a8f4c;
+    border-radius: 999px;
+    padding: 3px 10px;
+    margin-bottom: 6px;
+  }
+
   .empty-msg {
     text-align: center;
     font-size: 13px;
@@ -447,7 +458,7 @@ const HERO_NIGHT = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAywAAAQACAIAAA
 
 const LINES = {
   "긴자선": ["아사쿠사","타와라마치","이나리초","우에노","우에노히로코지","스에히로초","칸다","미츠코시마에","니혼바시","교바시","긴자","신바시","토라노몬","타메이케산노","아카사카미츠케","아오야마이치초메","가이엔마에","오모테산도","시부야"],
-  "마루노우치선": ["오기쿠보","미나미아사가야","신코엔지","히가시코엔지","신나카노","나카노사카우에","니시신주쿠","신주쿠","신주쿠삼초메","신주쿠교엔마에","요츠야삼초메","요츠야","아카사카미츠케","국회의사당앞","카스미가세키","긴자","도쿄","오테마치","아와지초","오차노미즈","혼고삼초메","코라쿠엔","묘가다니","신오츠카","이케부쿠로","나카노신바시","나카노후지미초","호난초"],
+  "마루노우치선": ["오기쿠보","미나미아사가야","신코엔지","히가시코엔지","신나카노","나카노사카우에","나카노신바시","나카노후지미초","호난초","니시신주쿠","신주쿠","신주쿠삼초메","신주쿠교엔마에","요츠야삼초메","요츠야","아카사카미츠케","국회의사당앞","카스미가세키","긴자","도쿄","오테마치","아와지초","오차노미즈","혼고삼초메","코라쿠엔","묘가다니","신오츠카","이케부쿠로"],
   "히비야선": ["나카메구로","에비스","히로오","롯폰기","카미야초","토라노몬힐즈","카스미가세키","히비야","긴자","히가시긴자","츠키지","핫초보리","카야바초","닌교초","코덴마초","아키하바라","나카오카치마치","우에노","이리야","미노와","미나미센주","기타센주"],
   "토자이선": ["나카노","오치아이","타카다노바바","와세다","카구라자카","이다바시","구단시타","타케바시","오테마치","니혼바시","카야바초","몬젠나카초","키바","토요초","미나미스나마치","니시카사이","카사이","우라야스","미나미교토쿠","교토쿠","묘덴","바라키나카야마","니시후나바시"],
   "치요다선": ["요요기우에하라","요요기코엔","메이지진구마에","오모테산도","노기자카","아카사카","국회의사당앞","카스미가세키","히비야","니주바시마에","오테마치","신오차노미즈","유시마","네즈","센다기","니시닛포리","마치야","기타센주","아야세","기타아야세"],
@@ -458,7 +469,7 @@ const LINES = {
   "아사쿠사선": ["니시마고메","마고메","나카노부","토고시","고탄다","타카나와다이","센가쿠지","미타","다이몬","신바시","히가시긴자","다카라초","니혼바시","닌교초","히가시니혼바시","아사쿠사바시","쿠라마에","아사쿠사","혼조아즈마바시","오시아게"],
   "미타선": ["메구로","시로카네다이","시로카네타카나와","미타","시바코엔","오나리몬","우치사이와이초","히비야","오테마치","진보초","스이도바시","카스가","하쿠산","센고쿠","스가모","니시스가모","신이타바시","이타바시구청앞","이타바시혼초","모토하스누마","시무라사카우에","시무라산초메","하스네","니시다이","타카시마다이라","신타카시마다이라","니시타카시마다이라"],
   "신주쿠선": ["신주쿠","신주쿠삼초메","아케보노바시","이치가야","쿠단시타","오가와마치","이와모토초","바쿠로요코야마","하마초","모리시타","키쿠카와","스미요시","오지마","히가시오지마","후나보리","이치노에","미즈에","시노자키","모토야와타"],
-  "오에도선": ["도청앞","신주쿠니시구치","히가시신주쿠","와카마츠카와다","우시고메야나기초","우시고메카구라자카","이다바시","카스가","우에노오카치마치","신오카치마치","쿠라마에","료고쿠","모리시타","키요스미시라카와","몬젠나카초","츠키시마","카치도키","츠키지시조","시오도메","다이몬","아카바네바시","아자부쥬반","롯폰기","아오야마이치초메","국립경기장","요요기","신주쿠","도청앞","니시신주쿠오초메","나카노사카우에","히가시나카노","나카노에고타","네리마","네리마카스가초","히카리가오카"]
+  "오에도선": ["도청앞","신주쿠니시구치","히가시신주쿠","와카마츠카와다","우시고메야나기초","우시고메카구라자카","이다바시","카스가","우에노오카치마치","신오카치마치","쿠라마에","료고쿠","모리시타","키요스미시라카와","몬젠나카초","츠키시마","카치도키","츠키지시조","시오도메","다이몬","아카바네바시","아자부쥬반","롯폰기","아오야마이치초메","국립경기장","요요기","신주쿠","니시신주쿠오초메","나카노사카우에","히가시나카노","나카노에고타","네리마","네리마카스가초","히카리가오카"]
 };
 
 const LINE_COLORS = {
@@ -655,11 +666,13 @@ function badge(line) {
   return '<span class="line-badge" style="background:' + color + '">' + line + '</span>';
 }
 
-function findTransfers(startLines, endLines) {
+function findTransfers(startLines, endLines, startStation, endStation) {
   const seen = new Set();
   const results = [];
   startLines.forEach(function(l1) {
-    LINES[l1].forEach(function(st) {
+    const line1Stations = LINES[l1];
+    const idxStart = line1Stations.indexOf(startStation);
+    line1Stations.forEach(function(st, idxVia1) {
       const linesHere = stationToLines[st];
       if (linesHere.size > 1) {
         linesHere.forEach(function(l2) {
@@ -667,13 +680,19 @@ function findTransfers(startLines, endLines) {
             const key = l1 + '>' + st + '>' + l2;
             if (!seen.has(key)) {
               seen.add(key);
-              results.push({ via: st, line1: l1, line2: l2 });
+              const line2Stations = LINES[l2];
+              const idxVia2 = line2Stations.indexOf(st);
+              const idxEnd = line2Stations.indexOf(endStation);
+              const dist1 = idxStart >= 0 ? Math.abs(idxVia1 - idxStart) : 99;
+              const dist2 = idxEnd >= 0 ? Math.abs(idxVia2 - idxEnd) : 99;
+              results.push({ via: st, line1: l1, line2: l2, totalDist: dist1 + dist2 });
             }
           }
         });
       }
     });
   });
+  results.sort(function(a, b) { return a.totalDist - b.totalDist; });
   return results;
 }
 
@@ -729,11 +748,14 @@ function search() {
     });
   } catch (e) {}
 
-  function directCard(line) {
-    return '<div class="transfer-card">' + badge(line) + ' ' + start + ' - ' + end + '</div>';
-  }
-  function transferCard(t) {
+  function directCard(line, isBest) {
     return '<div class="transfer-card">' +
+      (isBest ? '<span class="best-tag">⭐ 추천경로</span><br>' : '') +
+      badge(line) + ' ' + start + ' - ' + end + '</div>';
+  }
+  function transferCard(t, isBest) {
+    return '<div class="transfer-card">' +
+      (isBest ? '<span class="best-tag">⭐ 추천경로</span><br>' : '') +
       badge(t.line1) + ' ' + start + ' - ' + '<span class="transfer-tag">환승</span>' + t.via + '<br>- ' + badge(t.line2) + ' ' + end +
       '</div>';
   }
@@ -742,14 +764,15 @@ function search() {
     let html = '<div class="route-path">' + start + '역 → ' + end + '역</div>';
 
     if (direct.length > 0) {
-      direct.forEach(function(l) { html += directCard(l); });
+      direct.forEach(function(l, i) { html += directCard(l, i === 0 && direct.length > 1); });
       html += '<div class="empty-msg">환승 없이 한 번에 이동 가능합니다.</div>';
     } else {
-      const transfers = findTransfers(startLines, endLines);
+      const transfers = findTransfers(startLines, endLines, start, end);
       if (transfers.length === 0) {
         html += '<div class="empty-msg">1회 환승으로 갈 수 있는 경로를 찾지 못했습니다.<br>2회 이상 환승이 필요할 수 있습니다.</div>';
       } else {
-        transfers.slice(0, 4).forEach(function(t) { html += transferCard(t); });
+        const shown = transfers.slice(0, 4);
+        shown.forEach(function(t, i) { html += transferCard(t, i === 0 && shown.length > 1); });
       }
     }
 
