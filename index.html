@@ -332,8 +332,19 @@
     padding: 10px 12px;
     margin-bottom: 8px;
     font-size: 13px;
-    line-height: 2;
+    line-height: 1.3;
     text-align: center;
+  }
+
+  .route-step {
+    font-weight: 700;
+    color: #123d2a;
+    padding: 2px 0;
+  }
+  .route-seg {
+    font-size: 11px;
+    color: #3f8a63;
+    padding: 1px 0 3px;
   }
   .transfer-card .via {
     color: #1a8f4c;
@@ -686,7 +697,7 @@ function findTransfers(startLines, endLines, startStation, endStation) {
               const idxEnd = line2Stations.indexOf(endStation);
               const dist1 = idxStart >= 0 ? Math.abs(idxVia1 - idxStart) : 99;
               const dist2 = idxEnd >= 0 ? Math.abs(idxVia2 - idxEnd) : 99;
-              results.push({ via: st, line1: l1, line2: l2, totalDist: dist1 + dist2 });
+              results.push({ via: st, line1: l1, line2: l2, totalDist: dist1 + dist2, stops1: dist1, stops2: dist2 });
             }
           }
         });
@@ -749,15 +760,30 @@ function search() {
     });
   } catch (e) {}
 
+  function stopCount(line, s1, s2) {
+    const arr = LINES[line];
+    const i1 = arr.indexOf(s1), i2 = arr.indexOf(s2);
+    if (i1 < 0 || i2 < 0) return null;
+    return Math.abs(i2 - i1);
+  }
+
   function directCard(line, isBest) {
+    const n = stopCount(line, start, end);
     return '<div class="transfer-card">' +
       (isBest ? '<span class="best-tag">⭐ 추천경로</span><br>' : '') +
-      badge(line) + ' ' + start + ' - ' + end + '</div>';
+      '<div class="route-step">' + badge(line) + ' ' + start + '</div>' +
+      '<div class="route-seg">| - ' + (n !== null ? n + '정거장' : '') + '</div>' +
+      '<div class="route-step">' + badge(line) + ' ' + end + '</div>' +
+      '</div>';
   }
   function transferCard(t, isBest) {
     return '<div class="transfer-card">' +
       (isBest ? '<span class="best-tag">⭐ 추천경로</span><br>' : '') +
-      badge(t.line1) + ' ' + start + ' - ' + '<span class="transfer-tag">환승</span>' + t.via + '<br>- ' + badge(t.line2) + ' ' + end +
+      '<div class="route-step">' + badge(t.line1) + ' ' + start + '</div>' +
+      '<div class="route-seg">| - ' + t.stops1 + '정거장</div>' +
+      '<div class="route-step"><span class="transfer-tag">환승</span>' + t.via + '</div>' +
+      '<div class="route-seg">| - ' + t.stops2 + '정거장</div>' +
+      '<div class="route-step">' + badge(t.line2) + ' ' + end + '</div>' +
       '</div>';
   }
 
