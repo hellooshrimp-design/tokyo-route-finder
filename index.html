@@ -20,6 +20,13 @@
 <link rel="icon" type="image/png" href="favicon.png">
 <link rel="apple-touch-icon" href="favicon.png">
 <meta name="naver-site-verification" content="30bfcf5cb022d0af80da7219602213948131191c" />
+
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#1a8f4c">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="도쿄지하철">
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-WJWJ98BVSE"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
@@ -618,6 +625,12 @@ resetBtn.addEventListener('click', function() {
 });
 
 renderFavorites();
+
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', function() {
+    navigator.serviceWorker.register('sw.js').catch(function() {});
+  });
+}
 
 function setupAutocomplete(input, box) {
   let activeIndex = -1;
